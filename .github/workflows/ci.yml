@@ -18,7 +18,10 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
       - name: Install (dev extras)
-        run: uv pip install --system -e ".[api,cli,dev]"
+        run: |
+          uv venv --python ${{ matrix.python-version }}
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+          uv pip install -e ".[api,cli,dev]"
       - name: Lint (ruff, incl. ANN type-annotation rules)
         run: |
           ruff check .
